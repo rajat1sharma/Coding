@@ -35,5 +35,5 @@ int main()
 		}
 		cout<<abs(ans-(n/ans))<<endl;
 	}
-	//hellloo
+	//hellloosdasd
 }
