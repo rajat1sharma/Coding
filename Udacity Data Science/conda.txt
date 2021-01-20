@@ -1,0 +1,87 @@
+conda list
+conda upgrade conda
+conda upgrade --all
+conda install package_name
+conda remove package_name
+conda update package_name
+conda update --all
+conda search *beautifulsoup*
+
+
+conda create -n env_name list of packages
+conda create -n my_env numpy
+conda create -n py3 python=3
+conda create -n py2 python=2
+conda activate my_env
+conda deactivate
+
+conda env export > environment.yaml
+conda env export
+To create an environment from an environment file use conda env create -f environment.yaml. This will create a new environment with the same name listed in environment.yaml.
+conda env list
+conda env remove -n env_name
+pip freeze
+
+https:
+conda create -n style-transfer python=3
+conda activate style-transfer
+conda install tensorflow scipy pillow
+pip install moviepy
+python -c "import imageio; imageio.plugins.ffmpeg.download()"
+pip install imageio-ffmpeg
+python evaluate.py --checkpoint ./rain-princess.ckpt --in-path <path_to_input_file> --out-path ./output_image.jpg
+
+
+https:
+
+
+conda create --name=flappybird python=3.5
+conda activate flappybird
+conda install opencv
+pip install pygame
+pip install tensorflow==0.12
+git clone https:
+cd DeepLearningFlappyBird
+python deep_q_network.py
+
+
+
+conda install jupyter notebook
+jupyter notebook to start
+conda install nb_conda
+shift+enter next cell
+ctrl+enter same cell but execute
+press tab to autocomplete
+shift+tab to get detail about function
+_italics_
+__bold__
+```
+code
+```
+https:
+https:
+H in command mode
+A for above B for below
+Y and M to switch markdown and code
+L for line numbers
+Double D to  delete
+%%timeit
+%config InlineBackend.figure_format = 'retina' after %matplotlib inline
+%pdb
+https:
+jupyter nbconvert --to html notebook.ipynb
+jupyter nbconvert notebook.ipynb --to slides
+jupyter nbconvert notebook.ipynb --to slides --post serve
+
+
+
+https:
+The most common way to work with numbers in NumPy is through ndarray objects. They are similar to Python lists, but can have any number of dimensions. Also, ndarray supports fast math operations, which is just what we want.
+
+
+
+Cross entropy is sum of negative of logarithms
+less cross entropy better the function
+
+
+

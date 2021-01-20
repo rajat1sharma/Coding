@@ -1,0 +1,91 @@
+import asyncio
+import argparse
+import aiohttp
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-u', '--username',
+                    help='Instagram username', required=True)
+parser.add_argument('-p', '--password',
+                    help='Instagram password', required=True)
+parser.add_argument('-i', '--input', help='Input file', required=True)
+parser.add_argument('-o', '--output', help='Output file', required=True)
+args = parser.parse_args()
+
+URL = 'https:
+LOGIN_URL = 'https:
+
+
+async def login(username, password, session):
+    async with session.get(URL.format('')) as response:
+        csrftoken = await response.text()
+
+    csrftoken = csrftoken.split('csrf_token":"')[1].split('"')[0]
+
+    async with session.post(
+            LOGIN_URL,
+        headers={
+            'x-csrftoken': csrftoken, 'x-instagram-ajax': '1',
+            'x-requested-with': 'XMLHttpRequest',
+            'Origin': URL, 'Referer': URL
+        },
+        data={
+            'username': username, 'password': password
+        }
+    ) as response:
+
+        text = await response.json()
+
+        if text['authenticated']:
+            return True
+        else:
+            print('ERROR: Login Failed!')
+            return False
+
+
+async def check_usernames(username, sem, session):
+    output_file = open(args.output, 'a')
+    async with sem:
+        try:
+            async with session.get(URL.format(username)) as resp:
+                text = await resp.text()
+                if "Page Not Found" in text:
+                    print(username+'\n')
+                    output_file.write(username + '\n')
+                    print(username + ' is available and was saved to ' + args.output)
+                    
+
+        except:
+            pass
+    output_file.close()
+
+
+async def main():
+    sem = asyncio.BoundedSemaphore(50)
+    async with aiohttp.ClientSession() as session:
+        cont = await login(args.username, args.password, session)
+        if cont:
+            usernames = get_usernames()
+            tasks = [check_usernames(username, sem, session)
+                     for username in usernames]
+            await asyncio.gather(*tasks)
+        else:
+            pass
+
+if __name__ == "__main__":
+    def get_usernames():
+        input_file = open(args.input, 'r')
+        usernames = input_file.read()
+        input_file.close()
+        usernames = usernames.strip()
+        usernames = usernames.lower()
+        usernames = usernames.split('\n')
+        return usernames
+
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    try:
+        loop.run_until_complete(main())
+    finally:
+        loop.close()
+
+    pass
