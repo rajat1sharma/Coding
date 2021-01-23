@@ -1,7 +1,7 @@
 
 
 
-]public class linkedlist{
+public class linkedlist{
     
     private class Node{
         private int data=0;
