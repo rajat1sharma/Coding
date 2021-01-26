@@ -1,6 +1,3 @@
-
-
-
 public class linkedlist{
     
     private class Node{
