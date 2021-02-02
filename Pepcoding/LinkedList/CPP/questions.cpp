@@ -252,3 +252,421 @@ ListNode *mergeKLists(vector<ListNode *> &lists)
 
     return mergeKLists(lists, 0, lists.size() - 1);
 }
+
+//142
+bool hasCycle(ListNode *head)
+{
+    if (head == nullptr || head->next == nullptr)
+        return false;
+
+    ListNode *slow = head;
+    ListNode *fast = head;
+
+    while (fast != nullptr && fast->next != nullptr)
+    {
+        fast = fast->next->next;
+        slow = slow->next;
+        if (fast == slow)
+            return true;
+    }
+
+    return false;
+}
+
+
+//143
+ListNode *detectCycle(ListNode *head)
+{
+
+    if (head == nullptr || head->next == nullptr)
+        return nullptr;
+
+    ListNode *slow = head;
+    ListNode *fast = head;
+
+    while (fast != nullptr && fast->next != nullptr)
+    {
+        fast = fast->next->next;
+        slow = slow->next;
+        if (fast == slow)
+            break;
+    }
+
+    if (fast != slow)
+        return nullptr;
+
+    slow = head;
+    while (slow != fast)
+    {
+        slow = slow->next;
+        fast = fast->next;
+
+    }
+
+    return slow;
+}
+
+ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+     ListNode* tempA=headA;
+     ListNode* tempB=headB;
+     int lenA=0;
+     int lenB=0;
+     while(tempA->next!=nullptr)
+     {
+         tempA=tempA->next;
+         lenA++;
+     }
+     while(tempB->next!=nullptr)
+     {
+         tempB=tempB->next;
+         lenB++;
+     }
+     if(lenA>lenB)
+     {
+         int jump=lenA-lenB;
+         while(jump--)
+            headA=headA->next;
+     }
+     else if(lenB>lenA)
+     {
+         int jump=lenB-lenA;
+         while(jump--)
+            headB=headB->next;
+     }
+     while(headA!=headB)
+     {
+         headA=headA->next;
+         headB-headB->next;
+     }
+     return headA;
+
+
+    }
+
+ListNode *th = nullptr;
+ListNode *tt = nullptr;
+
+void addFirstNode(ListNode *node)
+{
+    if (th == nullptr)
+    {
+        th = node;
+        tt = node;
+    }
+    else
+    {
+        node->next = th;
+        th = node;
+    }
+}
+//19
+ListNode *removeNthFromEnd(ListNode *head, int n)
+{
+    if (head == nullptr)
+        return head;
+
+    ListNode *c1 = head;
+    ListNode *c2 = head;
+
+    while (n-- > 0)
+        c2 = c2->next;
+
+    if (c2 == nullptr)
+    {
+        ListNode *temp = head;
+        head = head->next;
+        temp->next = nullptr;
+        return head;
+    }
+
+    while (c2->next != nullptr)
+    {
+        c2 = c2->next;
+        c1 = c1->next;
+    }
+
+    ListNode *temp = c1->next;
+    c1->next = c1->next->next;
+    temp->next = nullptr;
+
+    return head;
+}
+
+// temporary head, temporary tail
+ListNode *th = nullptr;
+ListNode *tt = nullptr;
+
+void addFirstNode(ListNode *node)
+{
+    if (th == nullptr)
+    {
+        th = node;
+        tt = node;
+    }
+    else
+    {
+        node->next = th;
+        th = node;
+    }
+}
+
+ListNode *reverseKGroup(ListNode *head, int k)
+{
+    if (head == nullptr || head->next == nullptr || k == 1)
+        return head;
+
+    // original head, original tail
+    ListNode *oh = nullptr;
+    ListNode *ot = nullptr;
+
+    int len = lengthOfLL(head);
+    ListNode *curr = head;
+
+    while (len >= k)
+    {
+        int tempK = k;
+        while (tempK-- > 0)
+        {
+            ListNode *forw = curr->next;
+            curr->next = nullptr;
+            addFirstNode(curr);
+            curr = forw;
+        }
+
+        if (oh == nullptr)
+        {
+            oh = th;
+            ot = tt;
+        }
+        else
+        {
+            ot->next = th;
+            ot = tt;
+        }
+
+        th = nullptr;
+        tt = nullptr;
+        len -= k;
+    }
+
+    ot->next = curr;
+    return oh;
+}
+
+//92
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        ListNode* prev=head;
+        ListNode* curr=head;
+        int idx=1;
+        while(idx!=m)
+        {
+            idx++;
+            prev=curr;
+            curr=curr->next;
+        }
+        while(idx!=n+1)
+        {
+            addFirstNode(curr);
+            curr=curr->next;
+            idx++;
+        }
+        prev->next=th;
+        tt->next=curr;
+        return head;
+    }
+
+
+    //138
+    void copyNodes(Node* head)
+    {
+        Node* curr=head;
+        while(curr!=nullptr)
+        {
+            Node *newNode=new Node(curr->val);
+            Node* fow=curr->next;
+            newNode->next=fow;
+            curr->next=newNode;
+            
+            curr=fow;
+        }
+    }
+    void randomNodes(Node* head)
+    {
+        Node* curr=head;
+        while(curr!=nullptr)
+        {
+            if(curr->random!=nullptr)
+            {
+                curr->next->random=curr->random->next;
+            }
+            curr=curr->next->next;
+        }
+    }
+    Node* extractLL(Node* head)
+    {
+        Node* dummy=new Node(-1);
+        Node* copycurr=dummy;
+        Node* curr=head;
+        while(curr!=nullptr)
+        {
+            copycurr->next=curr->next;
+            curr->next=curr->next->next;
+            
+            curr=curr->next;
+            copycurr=copycurr->next;
+        }
+        return dummy->next;
+        
+    }
+    Node* copyRandomList(Node* head) {
+        if(head==nullptr)
+            return head;
+        copyNodes(head);
+        randomNodes(head);
+        return extractLL(head);
+    }
+
+
+
+    class LRUCache {
+    private class Node {
+        int key = 0; // app name
+        int value = 0; // state of app
+
+        Node prev = null;
+        Node next = null;
+
+        Node(int key, int value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+
+    // Key , Node
+    private Node[] map;
+    private int maximumSize = 0;
+    private int currSize = 0;
+
+    private Node head = null;
+    private Node tail = null;
+
+    public LRUCache(int capacity) {
+        this.maximumSize = capacity;
+        map = new Node[3000 + 1];
+    }
+
+    public void removeTailNode() {
+        if (this.currSize == 1) {
+            this.head = null;
+            this.tail = null;
+        } else {
+            Node next = this.tail.next;
+
+            this.tail.next = null;
+            next.prev = null;
+
+            this.tail = next;
+        }
+        this.currSize--;
+    }
+
+    public void removeNode(Node node) {
+        if (this.currSize == 1) {
+            this.head = null;
+            this.tail = null;
+        } else if (node == this.tail) {
+            removeTailNode();
+            return;
+        } else {
+            Node prev = node.prev;
+            Node next = node.next;
+
+            node.prev = null;
+            node.next = null;
+
+            prev.next = next;
+            next.prev = prev;
+        }
+
+        this.currSize--;
+    }
+
+    public void addFirstNode(Node node) {
+        if (head == null) {
+            this.head = node;
+            this.tail = node;
+        } else {
+            this.head.next = node;
+            node.prev = this.head;
+            this.head = node;
+        }
+
+        this.currSize++;
+    }
+
+    public void makeMostRecent(Node node) {
+        if (node == this.head)
+            return;
+        removeNode(node);
+        addFirstNode(node);
+    }
+
+    public int get(int key) {
+        if (map[key] == null)
+            return -1;
+
+        Node node = map[key];
+        makeMostRecent(node);
+        return node.value;
+    }
+
+    // appp name, app state
+    public void put(int key, int value) {
+        if (map[key] != null) {
+            Node node = map[key];
+            node.value = value;
+            get(key);
+        } else {
+            if (this.currSize == this.maximumSize) {
+                map[this.tail.key] = null;
+                removeTailNode();
+
+            }
+
+            Node node = new Node(key, value);
+            addFirstNode(node);
+            map[key] = node;
+        }
+
+    }
+}
+
+//oddeven-java
+
+public static ListNode segregateEvenOdd(ListNode head) {
+        ListNode dummyOdd = new ListNode(-1);
+        ListNode dummyEven = new ListNode(-1);
+        ListNode odd = dummyOdd;
+        ListNode even = dummyEven;
+
+        ListNode curr = head;
+        while (curr != null) {
+            if (curr.val % 2 != 0) {
+                odd.next = curr;
+                odd = odd.next;
+            } else {
+                even.next = curr;
+                even = even.next;
+            }
+
+            curr = curr.next;
+        }
+
+        even.next = dummyOdd.next;
+        odd.next = null;
+
+        return dummyEven.next;
+
+    }
+
+
