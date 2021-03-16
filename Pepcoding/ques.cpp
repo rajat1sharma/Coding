@@ -1,5 +1,4 @@
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
 
 struct ListNode
@@ -11,7 +10,20 @@ struct ListNode
     ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
-//876
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
+    
+    Node(int _val) {
+        val = _val;
+        next = NULL;
+        random = NULL;
+    }
+};
+
+//876 : middle of linkedlist
 ListNode *middleNode(ListNode *head)
 {
     if (head == nullptr || head->next == nullptr)
@@ -28,6 +40,7 @@ ListNode *middleNode(ListNode *head)
     return slow;
 }
 
+//midNode to find the first mid in even length LinkedList
 ListNode *midNode(ListNode *head)
 {
     if (head == nullptr || head->next == nullptr)
@@ -44,7 +57,7 @@ ListNode *midNode(ListNode *head)
     return slow;
 }
 
-//206
+//206 : Reverse singly linked list
 ListNode *reverseList(ListNode *head)
 {
     if (head == nullptr || head->next == nullptr)
@@ -66,7 +79,7 @@ ListNode *reverseList(ListNode *head)
     return prev;
 }
 
-//234
+//234 : LL is palindrome or not
 bool isPalindrome(ListNode *head)
 {
     if (head == nullptr || head->next == nullptr)
@@ -100,6 +113,7 @@ bool isPalindrome(ListNode *head)
     return res;
 }
 
+//data reverse LL same concept as palindrome
 void dataReverse(ListNode *head)
 {
     if (head == nullptr || head->next == nullptr)
@@ -129,7 +143,7 @@ void dataReverse(ListNode *head)
     mid->next = nhead;
 }
 
-//143
+//143 : L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 →
 void reorderList(ListNode *head)
 {
     if (head == nullptr || head->next == nullptr)
@@ -166,7 +180,6 @@ void reorderList(ListNode *head)
     // againReorderList(head);
     // printList(head);
 }
-
 void printList(ListNode *node)
 {
     ListNode *curr = node;
@@ -177,7 +190,6 @@ void printList(ListNode *node)
     }
     cout << endl;
 }
-
 void againReorderList(ListNode *head)
 {
     if (head == nullptr || head->next == nullptr)
@@ -205,6 +217,7 @@ void againReorderList(ListNode *head)
     c1->next = h2;
 }
 
+//21 : merge two sorted list
 ListNode *mergeTwoLists(ListNode *l1, ListNode *l2)
 {
     if (l1 == nullptr || l2 == nullptr)
@@ -253,7 +266,7 @@ ListNode *sortList(ListNode *head)
     return mergeTwoLists(sortList(head), sortList(nHead));
 }
 
-//23
+//23 
 ListNode *mergeKLists(vector<ListNode *> &lists, int si, int ei)
 {
     if (si == ei)
@@ -266,6 +279,7 @@ ListNode *mergeKLists(vector<ListNode *> &lists, int si, int ei)
     return mergeTwoLists(list1, list2);
 }
 
+//knlogn
 ListNode *mergeKLists(vector<ListNode *> &lists)
 {
     if (lists.size() == 0)
@@ -355,7 +369,6 @@ ListNode *getIntersectionNode(ListNode *headA, ListNode *headB)
     tail->next = nullptr;
     return ans;
 }
-
 int lengthOfLL(ListNode *node)
 {
     if (node == nullptr)
@@ -370,7 +383,6 @@ int lengthOfLL(ListNode *node)
 
     return len;
 }
-
 ListNode *getIntersectionNode(ListNode *headA, ListNode *headB)
 {
     if (headA == nullptr || headB == nullptr)
@@ -407,6 +419,7 @@ ListNode *removeNthFromEnd(ListNode *head, int n)
     while (n-- > 0)
         c2 = c2->next;
 
+    //head is the Nth node from the end
     if (c2 == nullptr)
     {
         ListNode *temp = head;
@@ -445,7 +458,6 @@ void addFirstNode(ListNode *node)
         th = node;
     }
 }
-
 ListNode *reverseKGroup(ListNode *head, int k)
 {
     if (head == nullptr || head->next == nullptr || k == 1)
@@ -461,6 +473,7 @@ ListNode *reverseKGroup(ListNode *head, int k)
     while (len >= k)
     {
         int tempK = k;
+        //reverse elements in group of K using addFirst function
         while (tempK-- > 0)
         {
             ListNode *forw = curr->next;
@@ -550,7 +563,6 @@ void copyNodes(Node *head)
         curr = forw; // move
     }
 }
-
 void setRandoms(Node *head)
 {
     Node *curr = head;
@@ -562,7 +574,6 @@ void setRandoms(Node *head)
         curr = curr->next->next;
     }
 }
-
 Node *extractLL(Node *head)
 {
     Node *dummy = new Node(-1);
@@ -580,7 +591,6 @@ Node *extractLL(Node *head)
 
     return dummy->next;
 }
-
 Node *copyRandomList(Node *head)
 {
     if (head == nullptr)
@@ -592,8 +602,8 @@ Node *copyRandomList(Node *head)
     return extractLL(head);
 }
 
-//200
 
+//200
 void dfsIsland(int i, int j, int n, int m, vector<vector<char>> &grid, vector<vector<int>> &dir)
 {
     grid[i][j] = '0';
@@ -607,7 +617,6 @@ void dfsIsland(int i, int j, int n, int m, vector<vector<char>> &grid, vector<ve
         }
     }
 }
-
 int numIslands(vector<vector<char>> &grid)
 {
     if (grid.size() == 0 || grid[0].size() == 0)
@@ -633,7 +642,6 @@ int numIslands(vector<vector<char>> &grid)
 }
 
 //695
-
 int dfsArea(int i, int j, int n, int m, vector<vector<int>> &grid, vector<vector<int>> &dir)
 {
     grid[i][j] = 0;
@@ -650,7 +658,6 @@ int dfsArea(int i, int j, int n, int m, vector<vector<int>> &grid, vector<vector
 
     return area;
 }
-
 int maxAreaOfIsland(vector<vector<int>> &grid)
 {
     if (grid.size() == 0 || grid[0].size() == 0)
@@ -701,7 +708,6 @@ int islandPerimeter(vector<vector<int>> &grid)
             }
         }
     }
-
     return count * 4 - nbrs;
 }
 
@@ -717,7 +723,6 @@ void surroundedRegionDFS(int i, int j, int n, int m, vector<vector<char>> &grid,
             surroundedRegionDFS(r, c, n, m, grid, dir);
     }
 }
-
 void solve(vector<vector<char>> &grid)
 {
     if (grid.size() == 0 || grid[0].size() == 0)
@@ -755,7 +760,7 @@ void solve(vector<vector<char>> &grid)
     }
 }
 
-//1091
+//1091 : BFS shortest path
 int shortestPathBinaryMatrix(vector<vector<int>> &grid)
 {
     if (grid.size() == 0 || grid[0].size() == 0)
@@ -807,7 +812,7 @@ int shortestPathBinaryMatrix(vector<vector<int>> &grid)
     return -1;
 }
 
-//785
+//785 : BFS cycle
 bool isBipartite(vector<vector<int>> &graph, vector<int> &vis, int src)
 {
     queue<int> que;
@@ -847,7 +852,6 @@ bool isBipartite(vector<vector<int>> &graph, vector<int> &vis, int src)
 
     return true;
 }
-
 bool isBipartite(vector<vector<int>> &graph)
 {
     int n = graph.size();
@@ -872,7 +876,7 @@ bool isBipartite(vector<vector<int>> &graph)
     return res;
 }
 
-//994
+//994 : multiple BFS
 int orangesRotting(vector<vector<int>> &grid)
 {
 
@@ -928,7 +932,7 @@ int orangesRotting(vector<vector<int>> &grid)
     return -1;
 }
 
-//286
+//286 : multi point BFS
 void wallsAndGates(vector<vector<int>> &rooms)
 {
 
@@ -1010,7 +1014,7 @@ vector<int> kahnsAlgo(int N, vector<vector<int>> &graph)
 
     return ans;
 }
-
+//207 : kahnsAlgo
 bool canFinish(int N, vector<vector<int>> &arr)
 {
 
@@ -1023,7 +1027,7 @@ bool canFinish(int N, vector<vector<int>> &arr)
     return kahnsAlgo(N, graph).size() == N;
 }
 
-//210
+//210 : kahnsAlgo
 vector<int> findOrder(int N, vector<vector<int>> &arr)
 {
     vector<vector<int>> graph(N);
@@ -1039,7 +1043,7 @@ vector<int> findOrder(int N, vector<vector<int>> &arr)
     return ans;
 }
 
-// 207
+
 bool isCyclePresent_DFSTopo(int src, vector<int> &vis, vector<vector<int>> &graph)
 {
     vis[src] = 0;
@@ -1055,7 +1059,7 @@ bool isCyclePresent_DFSTopo(int src, vector<int> &vis, vector<vector<int>> &grap
     vis[src] = 1;
     return res;
 }
-
+//207 : isCyclePresent_DFSTopo
 bool canFinish(int N, vector<vector<int>> &arr)
 {
     vector<vector<int>> graph(N);
@@ -1095,7 +1099,6 @@ bool isCyclePresent_DFSTopo(int src, vector<int> &vis, vector<int> &ans, vector<
     ans.push_back(src);
     return res;
 }
-
 vector<int> findOrder(int N, vector<vector<int>> &arr)
 {
     vector<vector<int>> graph(N);
@@ -1116,6 +1119,7 @@ vector<int> findOrder(int N, vector<vector<int>> &arr)
     return ans;
 }
 
+//329 : indegree
 int longestIncreasingPath(vector<vector<int>> &matrix)
 {
     int n = matrix.size();
@@ -1169,10 +1173,12 @@ int longestIncreasingPath(vector<vector<int>> &matrix)
 }
 
 vector<int> par;
+vector<int> size;
 int findPar(int u)
 {
     return par[u] == -1 ? u : par[u] = findPar(par[u]);
 }
+//684 : union find
 vector<int> findRedundantConnection(vector<vector<int>> &edges)
 {
     int N = edges.size();
@@ -1196,6 +1202,7 @@ vector<int> findRedundantConnection(vector<vector<int>> &edges)
     return {};
 }
 
+//1061 : union find
 string smallestEquivalentString(string A, string B, string S)
 {
     for (int i = 0; i < 26; i++)
@@ -1225,7 +1232,7 @@ string smallestEquivalentString(string A, string B, string S)
     return ans;
 }
 
-//839
+//839 : union find
 bool isSimilar(string &s1, string &s2)
 {
     int count = 0;
@@ -1237,7 +1244,6 @@ bool isSimilar(string &s1, string &s2)
 
     return true;
 }
-
 int numSimilarGroups(vector<string> &strs)
 {
 
@@ -1386,7 +1392,6 @@ int minCostToSupplyWater_(int N, vector<vector<int>> &Edges)
 
     return cost;
 }
-
 int minCostToSupplyWater(int n, vector<int> &wells, vector<vector<int>> &pipes)
 {
     for (int i = 0; i < wells.size(); i++)
@@ -1559,7 +1564,6 @@ int mrPresident(int n, vector<vector<int>> &edges, long k)
 
     return overallWeightSum <= k ? transform : -1;
 }
-
 void mrPresident()
 {
     ios_base::sync_with_stdio(false);
@@ -1581,10 +1585,9 @@ void mrPresident()
     cout << mrPresident(n, edges, k) << endl;
 }
 
-//815
+//815 : BFS
 int numBusesToDestination(vector<vector<int>> &routes, int src, int dest)
 {
-
     if (src == dest)
         return 0;
     int n = routes.size();
@@ -1696,12 +1699,11 @@ int networkDelayTime(vector<vector<int>> &times, int n, int k)
 //1192
 vector<int> dis, low;
 vector<bool> vis;
-int time = 0;
+int time1 = 0;
 vector<vector<int>> res;
-
 void dfs(int src, int par, int n, vector<vector<int>> &graph)
 {
-    dis[src] = low[src] = time++;
+    dis[src] = low[src] = time1++;
     vis[src] = true;
 
     for (int nbr : graph[src])
@@ -1719,7 +1721,6 @@ void dfs(int src, int par, int n, vector<vector<int>> &graph)
             low[src] = min(dis[nbr], low[src]);
     }
 }
-
 vector<vector<int>> criticalConnections(int n, vector<vector<int>> &connections)
 {
     vector<vector<int>> graph(n);
@@ -1736,6 +1737,7 @@ vector<vector<int>> criticalConnections(int n, vector<vector<int>> &connections)
     dfs(0, -1, n, graph);
     return res;
 }
+
 class Edge
 {
 public:
