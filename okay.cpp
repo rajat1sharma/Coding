@@ -10,12 +10,11 @@ using namespace std;
 #define mod 1000000007
 int main()
 {
-   SPEED;
-   #ifndef ONLINE_JUDGE
-   freopen("input.txt", "r", stdin);
-   freopen("output.txt", "w", stdout);
-   #endif
-   cout<<"ssssss";
-   return 0;
+    SPEED;
+    #ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    #endif
+    
+    return 0;
 }
-
