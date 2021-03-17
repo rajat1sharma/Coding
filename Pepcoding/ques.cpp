@@ -10,13 +10,15 @@ struct ListNode
     ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
-class Node {
+class Node
+{
 public:
     int val;
-    Node* next;
-    Node* random;
-    
-    Node(int _val) {
+    Node *next;
+    Node *random;
+
+    Node(int _val)
+    {
         val = _val;
         next = NULL;
         random = NULL;
@@ -266,7 +268,7 @@ ListNode *sortList(ListNode *head)
     return mergeTwoLists(sortList(head), sortList(nHead));
 }
 
-//23 
+//23
 ListNode *mergeKLists(vector<ListNode *> &lists, int si, int ei)
 {
     if (si == ei)
@@ -601,7 +603,6 @@ Node *copyRandomList(Node *head)
 
     return extractLL(head);
 }
-
 
 //200
 void dfsIsland(int i, int j, int n, int m, vector<vector<char>> &grid, vector<vector<int>> &dir)
@@ -1042,7 +1043,6 @@ vector<int> findOrder(int N, vector<vector<int>> &arr)
     reverse(ans.begin(), ans.end());
     return ans;
 }
-
 
 bool isCyclePresent_DFSTopo(int src, vector<int> &vis, vector<vector<int>> &graph)
 {
@@ -1645,7 +1645,7 @@ int numBusesToDestination(vector<vector<int>> &routes, int src, int dest)
     return -1;
 }
 
-//743
+//743 : dijkstra
 int networkDelayTime(vector<vector<int>> &times, int n, int k)
 {
     vector<vector<pair<int, int>>> graph(n + 1);
@@ -1696,7 +1696,7 @@ int networkDelayTime(vector<vector<int>> &times, int n, int k)
     return maxValue;
 }
 
-//1192
+//1192 : articulation point and bridges
 vector<int> dis, low;
 vector<bool> vis;
 int time1 = 0;
@@ -1748,6 +1748,8 @@ public:
         this->w = w;
     }
 };
+
+//787
 int findCheapestPrice(int n, vector<vector<int>> &flights, int src, int dst, int K)
 {
     vector<vector<Edge>> graph(n);
@@ -1781,4 +1783,126 @@ int findCheapestPrice(int n, vector<vector<int>> &flights, int src, int dst, int
     }
 
     return -1;
+}
+
+//787 bellman ford
+int findCheapestPrice(int n, vector<vector<int>> &flights, int src, int dst, int k)
+{
+    //bellman ford
+    vector<int> prev(n, 1e5);
+    vector<int> curr;
+    k++;
+    prev[src] = 0;
+    while (k--)
+    {
+        curr = prev;
+        for (auto e : flights)
+        {
+            int u = e[0], v = e[1], wt = e[2];
+            if (prev[u] != 1e5)
+                curr[v] = min(prev[u] + wt, curr[v]);
+        }
+        prev = curr;
+    }
+    return curr[dst] != 1e5 ? curr[dst] : -1;
+}
+
+//924 : union find malware spread
+int minMalwareSpread(vector<vector<int>> &graph, vector<int> &A)
+{
+
+    for (int i = 0; i < graph.size(); i++)
+    {
+        size.push_back(1);
+        par.push_back(i);
+    }
+    int n = graph.size();
+    int m = graph[0].size();
+    sort(A.begin(), A.end());
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            if (graph[i][j] == 1)
+            {
+                int p1 = findPar(i);
+                int p2 = findPar(j);
+                if (p1 != p2)
+                {
+                    par[p1] = p2;
+                    size[p2] += size[p1];
+                }
+            }
+        }
+    }
+
+    vector<int> mal(graph.size(), 0);
+
+    for (auto i : A)
+    {
+        mal[findPar(i)]++;
+    }
+
+    int maxv = INT_MIN, index = A[0];
+    for (int i = 0; i < A.size(); i++)
+    {
+        if (mal[findPar(A[i])] == 1)
+        {
+            if (maxv < size[findPar(A[i])])
+            {
+                maxv = size[findPar(A[i])];
+                index = A[i];
+            }
+        }
+    }
+    return index;
+}
+
+//959 : union find
+int regionsBySlashes(vector<string> &grid)
+{
+
+    int n = grid.size();
+    int col = n + 1;
+    par.resize(col * col, 0);
+    for (int i = 1; i < n; i++)
+        for (int j = 1; j < n; j++)
+            par[i * col + j] = i * col + j;
+
+    int count = 1;
+    for (int i = 0; i < grid.size(); i++)
+    {
+
+        string s = grid[i];
+        for (int j = 0; j < s.length(); j++)
+        {
+            if (s[j] != ' ')
+            {
+                int x, y, a, b;
+                if (s[j] == '/')
+                {
+                    x = i;
+                    y = j + 1;
+                    a = i + 1;
+                    b = j;
+                }
+                else if (s[j] == '\\')
+                {
+                    x = i;
+                    y = j;
+                    a = i + 1;
+                    b = j + 1;
+                }
+                int u = x * col + y;
+                int v = a * col + b;
+                int p1 = findPar(u);
+                int p2 = findPar(v);
+                if (p1 != p2)
+                    par[p1] = p2;
+                else
+                    count++;
+            }
+        }
+    }
+    return count;
 }
