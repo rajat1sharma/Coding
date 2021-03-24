@@ -374,11 +374,12 @@ void climbStairs()
 {
     int n = 10;
     vector<int> dp(n + 1, -1);
-    int ans = climb_DP(0, n, dp);
-    int ans1 = climb_Opti(n);
-    for (int ele : dp)
-        cout << ele << " ";
-    cout << ans1 << endl;
+    int ans = climb_Rec(0, n);
+    // int ans = climb_DP(0, n, dp);
+    // int ans1 = climb_Opti(n);
+    // for (int ele : dp)
+    //     cout << ele << " ";
+    cout << ans << endl;
 }
 
 int minCostClimb_Rec(vector<int> &cost, int sp)
@@ -454,13 +455,13 @@ int minCostClimb_Opti(vector<int> &cost)
 void minCostClimbingStairs()
 {
     vector<int> cost = {10, 15, 20};
-    // vector<int> dp(cost.size()+1,-1);
-    // int ans=minCostClimb_DP(cost,0,dp);
-    int ans1 = minCostClimb_Opti(cost);
+    vector<int> dp(cost.size() + 1, -1);
+    int ans = minCostClimb_DP(cost, 0, dp);
+    //int ans1 = minCostClimb_Opti(cost);
     // cout<<ans1<<endl;
-    // for(int ele:dp)
-    //     cout<<ele<<" ";
-    cout << ans1 << endl;
+    for (int ele : dp)
+        cout << ele << " ";
+    cout << ans << endl;
 }
 
 int count_Rec(int n)
@@ -621,13 +622,13 @@ int maxGold(int n, int m, vector<vector<int>> M)
     // {
     //     ans=max(ans,maxGold_Rec(i,0,n,m,M));
     // }
-    
+
     // vector<vector<int>> dp(n, vector<int>(m, -1));
     // int ans = 0;
     // for (int i = 0; i < n; i++)
     //     ans = max(ans, maxGold_Memo(i, 0, n, m, M, dp));
 
-    vector<vector<int>> dp(n,vector<int>(m,-1));
+    vector<vector<int>> dp(n, vector<int>(m, -1));
     int ans = maxGold_DP(0, 0, n, m, M, dp);
     for (int i = 0; i < n; i++)
         ans = max(ans, dp[i][0]);
@@ -641,6 +642,24 @@ int maxGold(int n, int m, vector<vector<int>> M)
     return ans;
 }
 
+int numDecoding_Rec(string s, int idx)
+{
+    if (s.length() == 0)
+        return 1;
+    if (s[idx] == '0')
+        return 0;
+    int count = 0;
+    count += numDecoding_Rec(s, idx + 1);
+    int num = (s[idx] - '0') * 10 + s[idx + 1] - '0';
+    if (num <= 26)
+        count += numDecoding_Rec(s, idx + 2);
+    return count;
+}
+void numDecoding()
+{
+    string s = "226";
+    int ans = numDecoding_Rec(s, 0);
+}
 int main()
 {
     //fibo();
@@ -649,6 +668,6 @@ int main()
     //climbStairs();
     //minCostClimbingStairs();
     //countFriendsPairings();
-
+    //numDecoding();
     return 0;
 }
