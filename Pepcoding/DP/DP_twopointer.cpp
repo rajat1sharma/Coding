@@ -642,24 +642,172 @@ int maxGold(int n, int m, vector<vector<int>> M)
     return ans;
 }
 
-int numDecoding_Rec(string s, int idx)
+//91
+int numDecoding_Rec_Memo(string s, int idx, vector<int> &dp)
 {
-    if (s.length() == 0)
-        return 1;
-    if (s[idx] == '0')
-        return 0;
+    if (idx == s.length())
+        return dp[idx] = 1;
     int count = 0;
-    count += numDecoding_Rec(s, idx + 1);
-    int num = (s[idx] - '0') * 10 + s[idx + 1] - '0';
-    if (num <= 26)
-        count += numDecoding_Rec(s, idx + 2);
-    return count;
+    char one = s[idx];
+    if (one == '0')
+        return dp[idx] = 0;
+    if (dp[idx] != -1)
+        return dp[idx];
+    count += numDecoding_Rec_Memo(s, idx + 1, dp);
+    if (idx + 2 <= s.length())
+    {
+        char two = s[idx + 1];
+        int num = (one - '0') * 10 + (two - '0');
+        if (num <= 26)
+            count += numDecoding_Rec_Memo(s, idx + 2, dp);
+    }
+    return dp[idx] = count;
 }
-void numDecoding()
+int num_DP(string s, int IDX, vector<int> &dp)
 {
-    string s = "226";
-    int ans = numDecoding_Rec(s, 0);
+    for (int idx = s.length(); idx >= IDX; idx--)
+    {
+        if (idx == s.length())
+        {
+            dp[idx] = 1;
+            continue;
+        }
+        int count = 0;
+        char one = s[idx];
+        if (one == '0')
+        {
+            dp[idx] = 0;
+            continue;
+        }
+        count += dp[idx + 1];
+        if (idx + 2 <= s.length())
+        {
+            char two = s[idx + 1];
+            int num = (one - '0') * 10 + (two - '0');
+            if (num <= 26)
+                count += dp[idx + 2];
+        }
+        dp[idx] = count;
+    }
+    return dp[IDX];
 }
+int numDecodings()
+{
+    string s = "1102322149";
+    vector<int> dp(s.length() + 1, -1);
+    //int ans=numDecoding_Rec_Memo(s,0,dp);
+    int ans = num_DP(s, 0, dp);
+    // for(int ele:dp)
+    //     cout<<ele<<" ";
+    return ans;
+}
+
+//639
+int mod = 1e9 + 7;
+long num2_Rec_Memo(string &s, int idx, vector<long> &dp)
+{
+    if (idx == s.length())
+        return dp[idx] = 1;
+    if (s[idx] == '0')
+        return dp[idx] = 0;
+    char ch1 = s[idx];
+    char ch2 = s[idx + 1];
+    long count = 0;
+    if (dp[idx] != -1)
+        return dp[idx];
+    if (ch1 == '*')
+    {
+        count = (count % mod + (9 * num2_Rec_Memo(s, idx + 1, dp)) % mod) % mod;
+        if (idx + 2 <= s.length())
+        {
+            if (ch2 == '*')
+                count = (count % mod + (15 * num2_Rec_Memo(s, idx + 2, dp)) % mod) % mod;
+            else
+            {
+                if (ch2 - '0' <= 6)
+                    count = (count % mod + (2 * num2_Rec_Memo(s, idx + 2, dp)) % mod) % mod;
+                else
+                    count = (count % mod + num2_Rec_Memo(s, idx + 2, dp) % mod) % mod;
+            }
+        }
+    }
+    else
+    {
+        count = (count % mod + num2_Rec_Memo(s, idx + 1, dp) % mod) % mod;
+        if (idx + 2 <= s.length())
+        {
+            if (ch2 == '*')
+            {
+                if (ch1 - '0' == 1)
+                    count = (count % mod + (9 * num2_Rec_Memo(s, idx + 2, dp)) % mod) % mod;
+                else if (ch1 - '0' == 2)
+                    count = (count % mod + (6 * num2_Rec_Memo(s, idx + 2, dp)) % mod) % mod;
+            }
+            else
+            {
+                if ((ch1 - '0') * 10 + (ch2 - '0') <= 26)
+                    count = (count % mod + num2_Rec_Memo(s, idx + 2, dp) % mod) % mod;
+            }
+        }
+    }
+    return dp[idx] = count % mod;
+}
+long num2_DP(string &s, int IDX, vector<long> &dp)
+{
+    for (int idx = s.length(); idx >= IDX; idx--)
+    {
+        if (idx == s.length())
+        {
+            dp[idx] = 1;
+            continue;
+        }
+        if (s[idx] == '0')
+        {
+            dp[idx] = 0;
+            continue;
+        }
+        char ch1 = s[idx];
+        char ch2 = s[idx + 1];
+        long count = 0;
+
+        if (ch1 == '*')
+        {
+            count = (count % mod + (9 * dp[idx + 1]) % mod) % mod;
+            if (idx + 2 <= s.length())
+                if (ch2 == '*')
+                    count = (count % mod + (15 * dp[idx + 2]) % mod) % mod;
+                else if (ch2 - '0' <= 6)
+                    count = (count % mod + (2 * dp[idx + 2]) % mod) % mod;
+                else
+                    count = (count % mod + dp[idx + 2] % mod) % mod;
+        }
+        else
+        {
+            count = (count % mod + dp[idx + 1] % mod) % mod;
+            if (idx + 2 <= s.length())
+
+                if (ch2 == '*')
+                    if (ch1 - '0' == 1)
+                        count = (count % mod + (9 * dp[idx + 2]) % mod) % mod;
+                    else if (ch1 - '0' == 2)
+                        count = (count % mod + (6 * dp[idx + 2]) % mod) % mod;
+                    else if ((ch1 - '0') * 10 + (ch2 - '0') <= 26)
+                        count = (count % mod + dp[idx + 2] % mod) % mod;
+        }
+        dp[idx] = count % mod;
+    }
+    return dp[IDX];
+}
+int num2Decodings()
+{
+    string s = "1**130*10*222***";
+    vector<long> dp(s.length() + 1, -1);
+    long ans = num2_DP(s, 0, dp) % mod;
+    return ans;
+}
+
+
+
 int main()
 {
     //fibo();
