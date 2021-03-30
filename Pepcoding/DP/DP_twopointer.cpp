@@ -772,42 +772,75 @@ long num2_DP(string &s, int IDX, vector<long> &dp)
 
         if (ch1 == '*')
         {
-            count = (count % mod + (9 * dp[idx + 1]) % mod) % mod;
+            count = (count + (9 * dp[idx + 1])) % mod;
             if (idx + 2 <= s.length())
                 if (ch2 == '*')
-                    count = (count % mod + (15 * dp[idx + 2]) % mod) % mod;
+                    count = (count + (15 * dp[idx + 2])) % mod;
                 else if (ch2 - '0' <= 6)
-                    count = (count % mod + (2 * dp[idx + 2]) % mod) % mod;
+                    count = (count + (2 * dp[idx + 2])) % mod;
                 else
-                    count = (count % mod + dp[idx + 2] % mod) % mod;
+                    count = (count + dp[idx + 2]) % mod;
         }
         else
         {
-            count = (count % mod + dp[idx + 1] % mod) % mod;
+            count = (count + dp[idx + 1]) % mod;
             if (idx + 2 <= s.length())
-
                 if (ch2 == '*')
+                {
                     if (ch1 - '0' == 1)
-                        count = (count % mod + (9 * dp[idx + 2]) % mod) % mod;
+                        count = (count + (9 * dp[idx + 2])) % mod;
                     else if (ch1 - '0' == 2)
-                        count = (count % mod + (6 * dp[idx + 2]) % mod) % mod;
-                    else if ((ch1 - '0') * 10 + (ch2 - '0') <= 26)
-                        count = (count % mod + dp[idx + 2] % mod) % mod;
+                        count = (count + (6 * dp[idx + 2])) % mod;
+                }
+                else if ((ch1 - '0') * 10 + (ch2 - '0') <= 26)
+                    count = (count + dp[idx + 2]) % mod;
         }
         dp[idx] = count % mod;
     }
     return dp[IDX];
 }
-int num2Decodings()
+void num2Decodings()
 {
-    string s = "1**130*10*222***";
+    string s = "11**2*10*2*3*2";
     vector<long> dp(s.length() + 1, -1);
     long ans = num2_DP(s, 0, dp) % mod;
-    return ans;
+    cout << ans << endl;
 }
 
-
-
+//https://www.geeksforgeeks.org/count-number-of-ways-to-partition-a-set-into-k-subsets/
+int numOfWay_Memo(int n, int k, vector<vector<int>> &dp)
+{
+    if (k == 1)
+        return dp[n][k] = 1;
+    if (n == k)
+        return dp[n][k] = 1;
+    if (dp[n][k] != 0)
+        return dp[n][k];
+    return dp[n][k] = (numOfWay_Memo(n - 1, k - 1, dp) + numOfWay_Memo(n - 1, k, dp) * k);
+}
+int numOfWay_DP(int N, int K, vector<vector<int>> &dp)
+{
+    for (int n = 1; n <= N; n++)
+    {
+        for (int k = 1; k <= K; k++)
+        {
+            if (k == 1 || n == k)
+                dp[n][k] = 1;
+            else
+                dp[n][k] = dp[n - 1][k] * k + dp[n - 1][k - 1];
+        }
+    }
+    return dp[N][K];
+}
+void numOfWay()
+{
+    int n = 5;
+    int k = 3;
+    vector<vector<int>> dp(n + 1, vector<int>(k + 1, 0));
+    int ans = numOfWay_DP(n, k, dp);
+    cout << ans << endl;
+    print_2D(dp);
+}
 int main()
 {
     //fibo();
@@ -817,5 +850,7 @@ int main()
     //minCostClimbingStairs();
     //countFriendsPairings();
     //numDecoding();
+    //num2Decodings();
+    numOfWay();
     return 0;
 }

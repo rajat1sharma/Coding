@@ -1,14 +1,8 @@
-int coinChange_Rec(vector<int>& arr,int tar)
-{
-    if(tar==0)
-        return 1;
-    int count = 0;
-    for(int ele:arr)
+for (auto ele : dp)
     {
-        if(tar-ele>=0)
+        for (int el : ele)
         {
-            count += coinChange_Rec(arr, tar - ele);
+            cout << el << " ";
         }
+        cout << endl;
     }
-    return count;
-}
