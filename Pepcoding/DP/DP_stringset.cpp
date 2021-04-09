@@ -244,6 +244,191 @@ void maxUncrossedLines()
     cout << dp[0][0];
 }
 
+//1458 same LCS approach
+int MDP_Memo(vector<int> &s, vector<int> &t, int i, int j, vector<vector<int>> &dp)
+{
+    if (s.size() == i || t.size() == j)
+        return dp[i][j] = -1e7;
+    if (dp[i][j] != -1e8)
+        return dp[i][j];
+    int count = 0;
+
+    count = max(MDP_Memo(s, t, i + 1, j, dp), MDP_Memo(s, t, i, j + 1, dp));
+    count = max(count, MDP_Memo(s, t, i + 1, j + 1, dp) + s[i] * t[j]);
+    count = max(count, s[i] * t[j]);
+
+    return dp[i][j] = count;
+}
+int maxDotProduct(vector<int> &nums1, vector<int> &nums2)
+{
+    vector<vector<int>> dp(nums1.size() + 1, vector<int>(nums2.size() + 1, -1e8));
+    int ans = MDP_Memo(nums1, nums2, 0, 0, dp);
+    return ans;
+}
+
+//72 edit distance
+int dis_Memo(string s, string t, int i, int j, vector<vector<int>> &dp)
+{
+    //recheck condition
+    if (i == s.length() || j == t.length())
+    {
+        return dp[i][j] = i == s.length() ? t.length() - j : s.length() - i;
+    }
+    if (dp[i][j] != -1)
+        return dp[i][j];
+    int count = 0;
+    if (s[i] == t[j])
+    {
+        count = dis_Memo(s, t, i + 1, j + 1, dp);
+    }
+    else
+    {
+        int insert = dis_Memo(s, t, i, j + 1, dp);
+        int del = dis_Memo(s, t, i + 1, j, dp);
+        int replace = dis_Memo(s, t, i + 1, j + 1, dp);
+        count += min(insert, min(del, replace)) + 1;
+    }
+    return dp[i][j] = count;
+}
+int dis_DP(string &s, string &t)
+{
+    int n = s.length();
+    int m = t.length();
+    vector<vector<int>> dp(n + 1, vector<int>(m + 1, -1));
+    for (int i = s.length(); i >= 0; i--)
+    {
+        for (int j = t.length(); j >= 0; j--)
+        {
+            if (i == s.length() || j == t.length())
+            {
+                dp[i][j] = i == s.length() ? t.length() - j : s.length() - i;
+                continue;
+            }
+            int count = 0;
+            if (s[i] == t[j])
+            {
+                count = dp[i + 1][j + 1];
+            }
+            else
+            {
+                int insert = dp[i][j + 1];
+                int del = dp[i + 1][j];
+                int replace = dp[i + 1][j + 1];
+                count += min(insert, min(del, replace)) + 1;
+            }
+            dp[i][j] = count;
+        }
+    }
+    return dp[0][0];
+}
+int minDistance(string word1, string word2)
+{
+
+    //int ans=dis_Memo(word1,word2,0,0,dp);
+    int ans = dis_DP(word1, word2);
+    return ans;
+}
+
+//44 wildcard matching
+//dp
+//-1 default
+//0 false
+//1 true
+int is_Memo(string &s, string &t, int i, int j, vector<vector<int>> &dp)
+{
+    //base case
+    if (i == s.length() || j == t.length())
+    {
+        if (i == s.length() && j == t.length())
+        {
+
+            return dp[i][j] = 1;
+        }
+        else
+        {
+            if (j + 1 == t.length() && t[j] == '*')
+                return dp[i][j] = 1;
+            else
+                return dp[i][j] = 0;
+        }
+    }
+    if (dp[i][j] != -1)
+        return dp[i][j];
+    bool ans = false;
+    if (s[i] == t[j])
+    {
+        ans = ans || is_Memo(s, t, i + 1, j + 1, dp);
+    }
+    else
+    {
+        if (t[j] == '?')
+            ans = ans || is_Memo(s, t, i + 1, j + 1, dp);
+        else if (t[j] == '*')
+        {
+            ans = ans || is_Memo(s, t, i + 1, j, dp);
+            ans = ans || is_Memo(s, t, i, j + 1, dp);
+        }
+        else
+            return dp[i][j] = 0;
+    }
+    return dp[i][j] = ans == 1 ? 1 : 0;
+}
+bool isMatch(string s, string p)
+{
+    int n = s.length();
+    int m = p.length();
+    string p1 = "";
+    for (int i = 0; i < m; i++)
+    {
+        if (p[i] != '*')
+            p1 += p[i];
+        else
+        {
+            p1 += p[i];
+            while (p[i + 1] == '*')
+                i++;
+        }
+    }
+    p = p1;
+    vector<vector<int>> dp(n + 1, vector<int>(m + 1, -1));
+    return is_Memo(s, p, 0, 0, dp) == 1 ? 1 : 0;
+}
+
+//count all aplindromic subsequences
+// /https://www.geeksforgeeks.org/count-palindromic-subsequence-given-string/
+//x+y+1  x+y-z
+//z is the overlapping subsequences which need to be subtracted
+long long int count_Memo(string &s, int i, int j, vector<vector<int>> &dp)
+{
+    int mod = 1e9 + 7;
+    if (i == j)
+        return dp[i][j] = 1;
+    if (i > j)
+        return dp[i][j] = 0;
+    if (dp[i][j] != -1)
+        return dp[i][j];
+    long long int count = 0;
+    long long int a = count_Memo(s, i + 1, j, dp) % mod;
+    long long int b = count_Memo(s, i, j - 1, dp) % mod;
+    long long int c = count_Memo(s, i + 1, j - 1, dp) % mod;
+    if (s[i] == s[j])
+        count = (a + b + 1) % mod;
+    else
+        count = (a + b - c + mod) % mod;
+
+    return dp[i][j] = count;
+}
+long long int countPS(string str)
+{
+    //Your code here
+
+    int n = str.length();
+    vector<vector<int>> dp(n + 1, vector<int>(n + 1, -1));
+    int ans = count_Memo(str, 0, n - 1, dp);
+    return ans;
+}
+
+
 int main()
 {
     //LPS();

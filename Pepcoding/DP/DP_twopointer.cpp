@@ -841,6 +841,7 @@ void numOfWay()
     cout << ans << endl;
     print_2D(dp);
 }
+
 int main()
 {
     //fibo();
