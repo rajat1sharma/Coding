@@ -11,11 +11,19 @@ using namespace std;
 #define rep(i, j, n) for (ll i = j; i < n; i++)
 #define per(i, j, n) for (ll i = j; i >= n; i--)
 #define mod 1000000007
+int solve(int L,int R,int x)
+{
+  vector<int> v(R - L,0);
+  for (int i = 0; i <= R - L;i++)
+  {
+    int idx = i + L;
+    
+  }
+}
 int main()
 {
   SPEED;
   int n;
-  cin >> n;
-  cout << "hello";
+  
   return 0;
 }
